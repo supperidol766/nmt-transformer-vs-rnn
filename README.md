@@ -2,7 +2,7 @@
 English→French NMT comparison: Transformer vs attention-based Seq2Seq (RNN). Includes BLEU evaluation, training logs (loss/LR), and attention visualizations.
 ---
 
-## Results (quick view)
+## Results
 
 > **Important note about BLEU**: this repo uses a **sentence-level BLEU with smoothing** (custom implementation), and the dev evaluation may run on a limited number of batches for speed. The numbers are best used for **within-repo comparison**, and are not directly comparable to official WMT sacreBLEU scores.
 
@@ -35,22 +35,24 @@ English→French NMT comparison: Transformer vs attention-based Seq2Seq (RNN). I
 
 ## Figures
 
-Recommended filenames:
-- `assets/loss_bleu.png`
-- `assets/lr.png`
-- `assets/transformer_attn_heads.png`
-- `assets/seq2seq_attn_heads.png`
-- `assets/transformer_attn_avg.png`
-- `assets/seq2seq_attn_avg.png`
+### Learning curves(left seq2seq; right transformer)
 
-### Learning curves
-![Loss/BLEU](assets/loss_bleu.png)
-![LR schedule](assets/lr.png)
+<p align="center">
+  <img src="assets/loss_bleu_seq2seq.png" width="420" />
+  <img src="assets/loss_bleu_transformer.png" width="420" />
+</p>
+
+<p align="center">
+  <img src="assets/lr_seq2seq.png" width="420" />
+  <img src="assets/lr_transformer.png" width="420" />
+</p>
 
 ### Cross-attention (avg over heads)
-(I recommend showing the averaged heatmaps in the README; per-head plots can be opened separately.)
-![Transformer cross-attn avg](assets/transformer_attn_avg.png)
-![Seq2Seq cross-attn avg](assets/seq2seq_attn_avg.png)
+
+<p align="center">
+  <img src="assets/transformer_layer_avg.png" width="420" />
+  <img src="assets/seq2seq_demo_avg.png" width="420" />
+</p>
 
 ---
 
@@ -61,6 +63,19 @@ Recommended filenames:
 
 ---
 
-## Dataset format
-Each line contains a source and target sentence separated by a **tab**:
-![Uploading plot_2026-01-30 15-25-45_1.png…]()
+## Dataset format (matches `utils.py`)
+
+The loader in `utils.py` reads a **UTF-8** text file where each line is:
+
+`<source sentence><TAB><target sentence>`
+
+- split by a TAB character (\t in code).
+- After that, both sides are tokenized by `split(' ')` (space-separated tokens).
+- `preprocess()` also:
+  - lowercases the text
+  - replaces non-breaking spaces (`\u202f`, `\xa0`) with normal spaces
+  - inserts spaces around punctuation: `, . ! ? ' "`
+
+Example (shown with `\t` for readability — in the real file it should be a literal TAB):
+
+
