@@ -1,0 +1,12 @@
+# ---- model weights / checkpoints (do not push to GitHub) ----
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.safetensors
+
+# optional: whole folders
+trained weights/
+checkpoints/
+runs/
+logs/
