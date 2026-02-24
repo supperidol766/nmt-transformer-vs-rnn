@@ -35,7 +35,7 @@ English→French NMT comparison: Transformer vs attention-based Seq2Seq (RNN). I
 
 ## Figures
 
-### Learning curves(left seq2seq; right transformer)
+### Learning curves(up seq2seq; down transformer)
 
 <p align="center">
   <img src="assets/loss_bleu_seq2seq.png" width="420" />
@@ -56,14 +56,14 @@ English→French NMT comparison: Transformer vs attention-based Seq2Seq (RNN). I
 
 ---
 
-## Attention visualization: quick observations
+## Attention visualization: 
 - **Seq2Seq** attention tends to look more “diagonal” (more direct token-to-token alignment).
 - **Transformer** heads show more “division of labor”: some heads align strongly, others are more diffuse (often focusing on function words, punctuation, or longer-range relations).
 - Content words like *important* / *health* often produce clear attention peaks, which matches intuition.
 
 ---
 
-## Dataset format (matches `utils.py`)
+## Dataset format 
 
 The loader in `utils.py` reads a **UTF-8** text file where each line is:
 
