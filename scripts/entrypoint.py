@@ -115,14 +115,13 @@ def build_model(cfg: dict, src_vocab: Vocab, tgt_vocab: Vocab) -> EncoderDecoder
         p = mcfg["seq2seq"]
         enc = Seq2seqEncoder(
             vocab_size=len(src_vocab),
-            embedding_size=p["embed_size"],
+            embed_size=p["embed_size"],
             num_hiddens=p["num_hiddens"],
             num_layers=p["num_layers"],
             dropout=p.get("dropout", 0.0),
             bidirectional=p.get("bidirectional", True),
         )
 
-        # Repo variants may differ slightly in constructor signature. Try named args first.
         decoder_exceptions = []
         for kwargs in [
             dict(
@@ -132,7 +131,7 @@ def build_model(cfg: dict, src_vocab: Vocab, tgt_vocab: Vocab) -> EncoderDecoder
                 num_layers=p["num_layers"],
                 num_heads=p.get("num_heads", 8),
                 dropout=p.get("dropout", 0.0),
-                bidirectional=p.get("bidirectional", True),
+                enc_bi=p.get("bidirectional", True),
             ),
             dict(
                 vocab_size=len(tgt_vocab),
@@ -200,5 +199,6 @@ def load_all(cfg_path: str, device: torch.device):
 
 
     return net, src_vocab, tgt_vocab, st, cfg
+
 
 
