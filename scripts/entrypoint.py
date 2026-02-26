@@ -11,7 +11,7 @@ from nmt.data.dataset import tokenize
 from nmt.data.vocab import Vocab
 from nmt.models.Transformer import TransformerEncoder, TransformerDecoder
 from nmt.models.seq2seq import Seq2seqEncoder, Seq2seqAttentionDecoder
-from nmt.models.wrapper import EncoderDecoder
+from nmt.models.wrappers import EncoderDecoder
 
 
 @dataclass
@@ -208,5 +208,6 @@ def load_all(cfg_path: str, device: torch.device):
         st.best_bleu = float(ckpt.get("best_bleu", 0.0))
         st.optimizer_state = ckpt.get("optimizer_state_dict")
         st.scheduler_state = ckpt.get("scheduler_state_dict")
+
 
     return net, src_vocab, tgt_vocab, st, cfg
