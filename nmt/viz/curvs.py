@@ -1,10 +1,11 @@
 import os
-
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def _resolve_ste:contentReference[oaicite:8]{index=8}ep"
+def _resolve_step_col(df: pd.DataFrame) -> str:
+    if "step" in df.columns:
+        return "step"
     if "global_step" in df.columns:
         return "global_step"
     raise KeyError(f"Neither 'step' nor 'global_step' found. Got columns={list(df.columns)}")
@@ -38,7 +39,3 @@ def plot_loss_bleu(run_dir, out_name="loss_bleu_curve.png"):
     plt.tight_layout()
     plt.savefig(os.path.join(run_dir, out_name), dpi=200)
     plt.close()
-
-
-if __name__ == "__main__":
-    pass
