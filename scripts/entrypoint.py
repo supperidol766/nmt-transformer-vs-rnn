@@ -115,7 +115,7 @@ def build_model(cfg: dict, src_vocab: Vocab, tgt_vocab: Vocab) -> EncoderDecoder
         p = mcfg["seq2seq"]
         enc = Seq2seqEncoder(
             vocab_size=len(src_vocab),
-            embed_size=p["embed_size"],
+            embedding_size=p["embed_size"],
             num_hiddens=p["num_hiddens"],
             num_layers=p["num_layers"],
             dropout=p.get("dropout", 0.0),
@@ -132,7 +132,7 @@ def build_model(cfg: dict, src_vocab: Vocab, tgt_vocab: Vocab) -> EncoderDecoder
                 num_layers=p["num_layers"],
                 num_heads=p.get("num_heads", 8),
                 dropout=p.get("dropout", 0.0),
-                bidirectional=p.get("bidirectional", True),
+                enc_bi=p.get("bidirectional", True),
             ),
             dict(
                 vocab_size=len(tgt_vocab),
@@ -166,14 +166,6 @@ def build_model(cfg: dict, src_vocab: Vocab, tgt_vocab: Vocab) -> EncoderDecoder
 
 
 def load_all(cfg_path: str, device: torch.device):
-    """
-    Unified loader for both train and predict.
-
-    Important fix:
-    - If checkpoint contains vocab, use checkpoint vocab FIRST, then build model.
-      This avoids vocab-size mismatch when resume/init uses a different vocab than
-      current local data rebuild.
-    """
     with open(cfg_path, "r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
 
@@ -190,17 +182,14 @@ def load_all(cfg_path: str, device: torch.device):
     if ckpt_path:
         ckpt = load_checkpoint_any(ckpt_path, device=device, weights_only=weights_only)
 
-    # 1) vocab priority: checkpoint vocab -> rebuild from train data
     if ckpt is not None and "src_vocab" in ckpt and "tgt_vocab" in ckpt:
         src_vocab = _vocab_from_json(ckpt["src_vocab"])
         tgt_vocab = _vocab_from_json(ckpt["tgt_vocab"])
     else:
         src_vocab, tgt_vocab = _build_vocab_from_data(cfg)
 
-    # 2) build model AFTER vocab is finalized
     net = build_model(cfg, src_vocab, tgt_vocab).to(device)
 
-    # 3) load weights + states
     if ckpt is not None:
         net.load_state_dict(ckpt["model_state_dict"])
         st.epoch = int(ckpt.get("epoch", 0))
@@ -211,3 +200,4 @@ def load_all(cfg_path: str, device: torch.device):
 
 
     return net, src_vocab, tgt_vocab, st, cfg
+
