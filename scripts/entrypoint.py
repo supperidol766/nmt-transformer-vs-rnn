@@ -127,16 +127,16 @@ def build_model(cfg: dict, src_vocab: Vocab, tgt_vocab: Vocab) -> EncoderDecoder
         for kwargs in [
             dict(
                 vocab_size=len(tgt_vocab),
-                embed_size=p["embed_size"],
+                embedding_size=p["embed_size"],
                 num_hiddens=p["num_hiddens"],
                 num_layers=p["num_layers"],
                 num_heads=p.get("num_heads", 8),
                 dropout=p.get("dropout", 0.0),
-                enc_bi=p.get("bidirectional", True),
+                bidirectional=p.get("bidirectional", True),
             ),
             dict(
                 vocab_size=len(tgt_vocab),
-                embed_size=p["embed_size"],
+                embedding_size=p["embed_size"],
                 num_hiddens=p["num_hiddens"],
                 num_layers=p["num_layers"],
                 num_heads=p.get("num_heads", 8),
@@ -144,7 +144,7 @@ def build_model(cfg: dict, src_vocab: Vocab, tgt_vocab: Vocab) -> EncoderDecoder
             ),
             dict(
                 vocab_size=len(tgt_vocab),
-                embed_size=p["embed_size"],
+                embedding_size=p["embed_size"],
                 num_hiddens=p["num_hiddens"],
                 num_layers=p["num_layers"],
                 dropout=p.get("dropout", 0.0),
@@ -200,4 +200,5 @@ def load_all(cfg_path: str, device: torch.device):
 
 
     return net, src_vocab, tgt_vocab, st, cfg
+
 
