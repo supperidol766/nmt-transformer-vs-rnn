@@ -41,7 +41,6 @@ def _vocab_from_json(obj: dict) -> Vocab:
 
 
 def _torch_load_safe(path: str, device: torch.device, weights_only: bool = True):
-    # weights_only=True is supported in newer PyTorch; keep fallback for compatibility.
     try:
         return torch.load(path, map_location=device, weights_only=weights_only)
     except TypeError:
@@ -199,6 +198,7 @@ def load_all(cfg_path: str, device: torch.device):
 
 
     return net, src_vocab, tgt_vocab, st, cfg
+
 
 
 
