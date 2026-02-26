@@ -7,8 +7,8 @@ class EncoderDecoder(nn.Module):
         self.encoder = encoder
         self.decoder = decoder
     def forward(self, enc_x: torch.Tensor, dec_x: torch.Tensor, enc_valid_lens: torch.Tensor):
-    # encoder outputs: Transformer -> Tensor; Seq2Seq -> (outputs, state)
         enc_outputs = self.encoder(enc_x, enc_valid_lens)
         dec_state = self.decoder.init_state(enc_outputs, enc_valid_lens)
     
         return self.decoder(dec_x, dec_state)
+
